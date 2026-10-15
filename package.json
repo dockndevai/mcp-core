@@ -1,0 +1,67 @@
+{
+  "name": "@dockndevai/mcp-core",
+  "version": "0.1.0",
+  "description": "Shared governance library for the dockndevai MCP server suite: safe-by-default security policy (capability ranking, resource allowlist / protected resources / opt-in flags, dry-run, audit), human-in-the-loop elicitation, path canonicalization, and a tool-registration helper. Includes a create-mcp-server scaffold.",
+  "type": "module",
+  "license": "MIT",
+  "author": "dockndevai <ankitcs17071993@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dockndevai/mcp-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dockndevai/mcp-core/issues"
+  },
+  "homepage": "https://github.com/dockndevai/mcp-core#readme",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "create-mcp-server": "bin/create-mcp-server.mjs"
+  },
+  "files": [
+    "dist",
+    "scaffold",
+    "bin",
+    "MIGRATION.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "library",
+    "governance",
+    "security",
+    "policy",
+    "typescript",
+    "llm",
+    "ai"
+  ],
+  "peerDependencies": {
+    "@modelcontextprotocol/sdk": ">=1.30.0",
+    "zod": ">=3.23.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@types/node": "^26.5.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0",
+    "zod": "^4.6.5"
+  }
+}
