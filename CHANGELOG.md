@@ -14,6 +14,9 @@
 - Secret-key redaction in prompts/fingerprints is matched on whole words: `bypass`, `tokenizer`, `keyword`
   are no longer shown as `[redacted]`; `passwordHash`, `accessToken`, `x-api-key` still are.
 
+- With `requireHuman`, a `probe` that cannot read the target's version refuses the action (it used to proceed
+  unpinned). `ConfirmRequest.reversible` keeps the prompt from claiming a reversible change "cannot be undone".
+
 ### Added
 - `makeConfirmer(server, options)` — `requireHuman` (no flags-only fallback), `audit`, `name`, `approvalTimeoutMs`.
 - `Confirmer.forCall(tool, args)` — approvals carry the tool, the exact secret-redacted arguments and a
