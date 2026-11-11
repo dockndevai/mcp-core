@@ -89,3 +89,27 @@ describe("annotationsFor", () => {
     expect(annotationsFor(read, false).openWorldHint).toBe(false);
   });
 });
+
+describe("buildServer binds approvals to the call", () => {
+  it("hands each handler a confirmer carrying that call's tool and arguments", async () => {
+    let seen: { tool?: string; fingerprint?: string } = {};
+    const probeTool: ToolDef<Ctx> = {
+      name: "delete_thing",
+      capability: "admin",
+      config: { title: "Delete", description: "d", inputSchema: {} },
+      handler: async (_a, { confirm }) => {
+        const out = await confirm.confirm({ action: "delete thing", target: "t" });
+        if (out.approved) seen = out.receipt;
+        return textResult("ok");
+      },
+    };
+    const context = ctx("admin");
+    const { server } = buildServer<Ctx>({ name: "t", version: "0", tools: [probeTool], context });
+    context.confirm = makeConfirmer(server, { audit: false });
+    // Call the registered handler directly (no transport): registeredTools is the SDK's internal map.
+    const reg = (server as unknown as { _registeredTools: Record<string, { handler: (a: unknown) => Promise<unknown> }> })._registeredTools;
+    await reg["delete_thing"].handler({ id: 7 });
+    expect(seen.tool).toBe("delete_thing");
+    expect(seen.fingerprint).toMatch(/^[0-9a-f]{16}$/);
+  });
+});

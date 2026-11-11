@@ -8,7 +8,10 @@ import type { Capability, SecurityPolicy } from "./security.js";
  */
 export interface BaseToolContext {
   policy: SecurityPolicy;
-  /** Human-in-the-loop confirmation (no-op fallback when the client can't elicit). */
+  /**
+   * Human-in-the-loop confirmation. `buildServer` hands each handler a confirmer bound to that call
+   * (`forCall`), so approvals carry the tool name, the exact arguments and a fingerprint.
+   */
   confirm: Confirmer;
 }
 

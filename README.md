@@ -106,9 +106,25 @@ policy.guard({ tool, capability: "read", resources: { path: { value: abs } } });
 const canon = await canonicalize(resolvePath(args.path));
 ```
 
-### `makeConfirmer(server)` — human-in-the-loop
+### `makeConfirmer(server, options?)` — human-in-the-loop
 
-Returns a `Confirmer`. When the client advertises elicitation, destructive tools pause for the **human** to approve the exact action; when it can't (or elicitation fails), it falls back to `{ approved: true }` — the policy gate was the real control, so this only ever adds a checkpoint, never removes one.
+Returns a `Confirmer`. When the client advertises elicitation, destructive tools pause for the **human** to approve the exact action:
+
+- **Bound to the action.** `buildServer` gives each handler `confirm.forCall(tool, args)`, so the prompt shows the tool, the full (secret-redacted) arguments and a fingerprint (`sha256(tool + canonical args)`), and the approval receipt is written to the audit log (`"audit":"approval"`).
+- **Bound to the target's version.** Pass `probe: () => Promise<string | undefined>` (etag, `resourceVersion`, `updated_at`, a content hash …). It is read before the prompt and again after the human answers; a different value refuses the action.
+- **Typed confirmation.** `typed: true` also requires the human to type the target name.
+- **A prompt nobody answers is a refusal.** The wait defaults to 5 minutes (`approvalTimeoutMs`); a timeout never approves.
+- **No human, no flags-only fallback — if you ask.** By default, when the client can't elicit the call falls back to `{ approved: true, interactive: false }` (the policy gate was the real control). With `requireHuman: true` (wire it to `<PREFIX>_REQUIRE_HUMAN_APPROVAL`) it is refused instead.
+
+```ts
+const ok = await confirm.confirm({
+  action: "delete dashboard",
+  target: uid,
+  typed: true,
+  probe: () => client.dashboardVersion(uid),
+});
+if (!ok.approved) return textResult(`Cancelled — ${ok.reason}.`);
+```
 
 ### `buildServer(opts)` — register the enabled tools
 
