@@ -7,6 +7,13 @@
   timeout and the `catch` fell through to `{ approved: true }`, so a prompt nobody answered auto-approved a
   destructive operation. A timeout is now a refusal; the wait defaults to 5 minutes (`approvalTimeoutMs`).
 
+- **The approval prompt is fully reviewable.** It used to cut the arguments at 1500 characters, so a human
+  could approve a long SQL statement or script after seeing only a (possibly padded) prefix. Arguments up to
+  16 000 characters are now shown in full; beyond that the action is **refused** ("too long to review")
+  unless the tool declares `summarizeLargeArgs` for an unreadable payload (file contents, base64).
+- Secret-key redaction in prompts/fingerprints is matched on whole words: `bypass`, `tokenizer`, `keyword`
+  are no longer shown as `[redacted]`; `passwordHash`, `accessToken`, `x-api-key` still are.
+
 ### Added
 - `makeConfirmer(server, options)` — `requireHuman` (no flags-only fallback), `audit`, `name`, `approvalTimeoutMs`.
 - `Confirmer.forCall(tool, args)` — approvals carry the tool, the exact secret-redacted arguments and a
