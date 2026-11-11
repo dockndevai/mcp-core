@@ -14,7 +14,7 @@ Your server keeps everything genuinely domain-specific.
 | --- | --- | --- |
 | Capability ranking + access-mode gating | `security.ts` | **mcp-core** `SecurityPolicy` |
 | Resource allowlist / protected / opt-in flags / dry-run / audit | `security.ts` | **mcp-core** `SecurityPolicy` + `guard()` |
-| Human-in-the-loop confirmation | `elicit.ts` | **mcp-core** `makeConfirmer` / `Confirmer` |
+| Human-in-the-loop confirmation (bound to tool + args + resource version) | `elicit.ts` | **mcp-core** `makeConfirmer` / `Confirmer` |
 | Path canonicalization (symlink-bypass fix) | `config.ts` `resolveRealPath` / `canonicalize` | **mcp-core** `resolveRealPath` / `canonicalize` / `resolvePath` |
 | Env parsing (`bool`/`csv`/`num`) | `config.ts` | **mcp-core** `envBool` / `envList` / `envNum` / `envEnum` |
 | Tool types + result helpers | `tools/types.ts` | **mcp-core** `ToolDef` / `BaseToolContext` / `jsonResult` / `textResult` / `imageResult` |

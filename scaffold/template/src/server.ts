@@ -1,4 +1,4 @@
-import { buildServer, makeConfirmer } from "@dockndevai/mcp-core";
+import { buildServer, envBool, makeConfirmer } from "@dockndevai/mcp-core";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "./client.js";
 import type { ToolContext } from "./context.js";
@@ -20,6 +20,10 @@ export function build(): { server: McpServer; enabled: string[] } {
     tools: ALL_TOOLS,
     context,
   });
-  context.confirm = makeConfirmer(built.server);
+  context.confirm = makeConfirmer(built.server, {
+    name: "__SERVER_NAME__",
+    requireHuman: envBool("__ENV_PREFIX___REQUIRE_HUMAN_APPROVAL", false),
+    audit: envBool("__ENV_PREFIX___AUDIT_LOG", true),
+  });
   return built;
 }

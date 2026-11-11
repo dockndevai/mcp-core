@@ -1,6 +1,6 @@
 {
   "name": "@dockndevai/mcp-core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Shared governance library for the dockndevai MCP server suite: safe-by-default security policy (capability ranking, resource allowlist / protected resources / opt-in flags, dry-run, audit), human-in-the-loop elicitation, path canonicalization, and a tool-registration helper. Includes a create-mcp-server scaffold.",
   "type": "module",
   "license": "MIT",

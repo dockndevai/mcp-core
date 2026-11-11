@@ -21,9 +21,13 @@ export {
 } from "./security.js";
 
 export {
+  type ApprovalReceipt,
   type ConfirmOutcome,
   type ConfirmRequest,
   type Confirmer,
+  type ConfirmerOptions,
+  canonicalArgs,
+  fingerprint,
   makeConfirmer,
 } from "./elicit.js";
 

@@ -43,7 +43,9 @@ export function buildServer<Ctx extends BaseToolContext>(
       { ...tool.config, annotations: annotationsFor(tool as ToolDef<BaseToolContext>, openWorld) },
       async (args: Record<string, unknown>) => {
         try {
-          return await tool.handler(args ?? {}, context);
+          // Bind every approval prompt in this call to this tool + these exact arguments.
+          const confirm = context.confirm?.forCall ? context.confirm.forCall(tool.name, args ?? {}) : context.confirm;
+          return await tool.handler(args ?? {}, { ...context, confirm });
         } catch (err) {
           return mapError(err);
         }
